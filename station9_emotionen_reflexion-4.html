@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Station 9 – Reflexion</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.10);
+  --border-strong: rgba(0,0,0,0.18);
+  --text: #1a1a18;
+  --text-muted: #6b6b67;
+  --text-faint: #9a9a96;
+  --accent: #3C3489;
+  --accent-mid: #7F77DD;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #18181a;
+    --surface: #222225;
+    --border: rgba(255,255,255,0.10);
+    --border-strong: rgba(255,255,255,0.20);
+    --text: #e8e8e4;
+    --text-muted: #9a9a96;
+    --text-faint: #6b6b67;
+    --accent: #AFA9EC;
+    --accent-mid: #7F77DD;
+  }
+}
+body {
+  font-family: -apple-system, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem 4rem;
+}
+.wrapper { width: 100%; max-width: 680px; }
+.header { margin-bottom: 2.5rem; }
+.station-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-mid);
+  margin-bottom: 0.5rem;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 0.75rem;
+}
+.header p { font-size: 15px; color: var(--text-muted); line-height: 1.65; }
+.progress-bar {
+  width: 100%; height: 2px; background: var(--border);
+  border-radius: 2px; margin-bottom: 2rem; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--accent-mid);
+  border-radius: 2px; transition: width 0.4s ease;
+}
+.situation-wrap {
+  background: var(--surface);
+  border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+.situation-nr {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+  text-transform: uppercase; color: var(--text-faint); margin-bottom: 1rem;
+}
+.situation-text {
+  font-size: 16px; line-height: 1.7; color: var(--text);
+  margin-bottom: 1.5rem; padding-bottom: 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+.fragen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 520px) { .fragen-grid { grid-template-columns: 1fr; } }
+.feld-label {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-muted); margin-bottom: 0.5rem; line-height: 1.4;
+}
+.feld-label.wunsch { color: var(--accent-mid); }
+textarea {
+  width: 100%; min-height: 100px; padding: 0.75rem;
+  font-family: -apple-system, Helvetica, Arial, sans-serif;
+  font-size: 14px; line-height: 1.6; color: var(--text);
+  background: var(--bg); border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius-sm); resize: vertical; outline: none;
+  transition: border-color 0.15s;
+}
+textarea::placeholder { color: var(--text-faint); }
+textarea:focus {
+  border-color: var(--accent-mid);
+  box-shadow: 0 0 0 3px rgba(127,119,221,0.12);
+}
+.nav {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-top: 0.5rem;
+}
+.nav-dots { display: flex; gap: 6px; }
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border-strong); transition: background 0.2s, transform 0.2s;
+}
+.dot.active { background: var(--accent-mid); transform: scale(1.3); }
+.btn {
+  font-family: -apple-system, Helvetica, Arial, sans-serif;
+  font-size: 14px; font-weight: 500; padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-sm); border: 0.5px solid var(--border-strong);
+  background: var(--surface); color: var(--text);
+  cursor: pointer; transition: background 0.15s, opacity 0.15s;
+}
+.btn:disabled { opacity: 0.35; cursor: default; }
+.btn:not(:disabled):hover { background: var(--bg); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:not(:disabled):hover {
+  background: var(--accent-mid); border-color: var(--accent-mid); color: #fff;
+}
+.btn-primary:disabled { background: var(--accent); color: #fff; border-color: var(--accent); }
+.send-status { font-size: 12px; color: var(--text-faint); text-align: center; margin-top: 0.75rem; min-height: 18px; }
+.abschluss {
+  display: none; text-align: center; padding: 3rem 1.5rem 2rem;
+  background: var(--surface); border: 0.5px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.abschluss i { font-size: 32px; color: var(--accent-mid); margin-bottom: 1.5rem; display: block; }
+.abschluss-zitat {
+  font-size: 17px; line-height: 1.75; color: var(--text);
+  max-width: 480px; margin: 0 auto 0.75rem;
+}
+.abschluss-attribution { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
+.abschluss-sub { font-size: 13px; color: var(--text-faint); }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <p class="station-label">Station 9 · Reflexion II</p>
+    <h1>Umgang mit Emotionen im Bildungssetting</h1>
+    <p>Drei Situationen aus dem Unterrichtsalltag. Zu jeder Situation zwei Fragen. Keine richtigen Antworten, keine Bewertung. Ihre Eingaben werden anonym gespeichert.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress" style="width: 33%"></div>
+  </div>
+
+  <div id="situations">
+
+    <div class="situation-wrap" id="s0">
+      <p class="situation-nr">Situation 1 von 3</p>
+      <p class="situation-text">Eine Teilnehmerin bricht mitten in der Sitzung in Tränen aus. Sie haben keine Ahnung, was passiert ist. Die Gruppe erstarrt. Alle schauen Sie an.</p>
+      <div class="fragen-grid">
+        <div>
+          <p class="feld-label">Was tue ich in diesem Moment?</p>
+          <textarea id="t0a" placeholder="Was passiert wirklich – was machen Sie?"></textarea>
+        </div>
+        <div>
+          <p class="feld-label wunsch">Was würde ich gerne tun?</p>
+          <textarea id="t0b" placeholder="Was wäre Ihr Wunsch – ohne Einschränkung?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="situation-wrap" id="s1" style="display:none">
+      <p class="situation-nr">Situation 2 von 3</p>
+      <p class="situation-text">Eine Teilnehmende hat eine Aufgabe nicht bestanden. Sie sehen, wie ihr Gesicht sich verändert, als sie das Ergebnis erfährt. Sie schaut weg und zieht sich zurück.</p>
+      <div class="fragen-grid">
+        <div>
+          <p class="feld-label">Was tue ich in diesem Moment?</p>
+          <textarea id="t1a" placeholder="Was passiert wirklich – was machen Sie?"></textarea>
+        </div>
+        <div>
+          <p class="feld-label wunsch">Was würde ich gerne tun?</p>
+          <textarea id="t1b" placeholder="Was wäre Ihr Wunsch – ohne Einschränkung?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="situation-wrap" id="s2" style="display:none">
+      <p class="situation-nr">Situation 3 von 3</p>
+      <p class="situation-text">Sie merken mitten in einer Einheit, dass Sie selbst gerade angespannt sind – aus einem Grund, der nichts mit dem Kurs zu tun hat. Eine Teilnehmende geht Ihnen total auf die Nerven. Die Gruppe reagiert auf Ihre Haltung.</p>
+      <div class="fragen-grid">
+        <div>
+          <p class="feld-label">Was tue ich in diesem Moment?</p>
+          <textarea id="t2a" placeholder="Was passiert wirklich – was machen Sie?"></textarea>
+        </div>
+        <div>
+          <p class="feld-label wunsch">Was würde ich gerne tun?</p>
+          <textarea id="t2b" placeholder="Was wäre Ihr Wunsch – ohne Einschränkung?"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="abschluss" id="abschluss">
+    <i class="ti ti-notes" aria-hidden="true"></i>
+    <p class="abschluss-zitat">«Zwischen Reiz und Reaktion liegt ein Raum. In diesem Raum liegt unsere Macht zur Wahl unserer Reaktion. In unserer Reaktion liegen unsere Entwicklung und unsere Freiheit.»</p>
+    <p class="abschluss-attribution">Viktor Frankl</p>
+    <p class="abschluss-sub">Ihre Eingaben wurden anonym gespeichert. Nichts wird einer Person zugeordnet.</p>
+  </div>
+
+  <div class="nav" id="nav">
+    <button class="btn" id="prev" onclick="navigate(-1)" disabled>← Zurück</button>
+    <div class="nav-dots">
+      <div class="dot active" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+    </div>
+    <button class="btn btn-primary" id="next" onclick="navigate(1)">Weiter →</button>
+  </div>
+  <p class="send-status" id="status"></p>
+
+</div>
+<script>
+const GOOGLE_URL = 'https://script.google.com/macros/s/AKfycbw61gpm44uzCIY78ZyAXwl5Rvc3bjYy4gEudySP6yQhBEgquv7QGr13hLVzoNfblATh/exec';
+const situations = [
+  'Teilnehmerin bricht in Tränen aus',
+  'Teilnehmende besteht Aufgabe nicht',
+  'Lehrkraft selbst angespannt'
+];
+let current = 0;
+const total = 3;
+const fills = [33, 66, 100];
+
+async function sendData(i) {
+  const a = document.getElementById('t' + i + 'a').value.trim();
+  const b = document.getElementById('t' + i + 'b').value.trim();
+  if (!a && !b) return;
+  try {
+    await fetch(GOOGLE_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ situation: situations[i], tun: a, wunsch: b })
+    });
+  } catch(e) { console.warn('Senden fehlgeschlagen:', e); }
+}
+
+async function navigate(dir) {
+  const cards = ['s0','s1','s2'];
+  const dots = ['d0','d1','d2'];
+  const nextBtn = document.getElementById('next');
+  if (dir === 1) {
+    nextBtn.disabled = true;
+    nextBtn.textContent = 'Speichern…';
+    await sendData(current);
+    nextBtn.disabled = false;
+  }
+  document.getElementById(cards[current]).style.display = 'none';
+  document.getElementById(dots[current]).classList.remove('active');
+  current += dir;
+  if (current < total) {
+    document.getElementById(cards[current]).style.display = 'block';
+    document.getElementById(dots[current]).classList.add('active');
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('progress').style.width = fills[current] + '%';
+    nextBtn.textContent = current === total - 1 ? 'Abschließen' : 'Weiter →';
+  } else {
+    document.getElementById('situations').style.display = 'none';
+    document.getElementById('abschluss').style.display = 'block';
+    document.getElementById('nav').style.display = 'none';
+    document.getElementById('progress').style.width = '100%';
+  }
+}
+</script>
+</body>
+</html>
